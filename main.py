@@ -4,7 +4,8 @@ from pydantic import BaseModel, Field
 from typing import Optional, List
 from jwt_manager import create_token, validate_token
 from fastapi.security import HTTPBearer
-
+from config.database import Session, engine, Base
+from models.movie import Movie as MovieModel #renombramos el modelo
 
 app = FastAPI();
 
@@ -95,6 +96,8 @@ def get_movies_by_category(category: str = Query(min_length=5, max_length=15) ) 
 
 @app.post('/movies', tags=['movies'], response_model=dict, status_code=201)
 def create_movie(movie: Movie) -> dict:
+    db = Session()
+    new_movie = MovieModel(**movie.dict())
     movies.append(movie)
     return JSONResponse(content={"message":"Se ha registrado la pelicula correctamente"})   
 
