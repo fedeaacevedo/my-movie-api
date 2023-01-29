@@ -98,7 +98,9 @@ def get_movies_by_category(category: str = Query(min_length=5, max_length=15) ) 
 def create_movie(movie: Movie) -> dict:
     db = Session()
     new_movie = MovieModel(**movie.dict())
-    movies.append(movie)
+    db.add(new_movie)
+    db.commit()
+    # movies.append(movie)
     return JSONResponse(content={"message":"Se ha registrado la pelicula correctamente"})   
 
 
